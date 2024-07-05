@@ -1,0 +1,25 @@
+{
+    "data": [
+      {"frequency": 28, "beam": 39.9, "nlev_p": 16.5},
+      {"frequency": 35, "beam": 31.9, "nlev_p": 13.3},
+      {"frequency": 45, "beam": 24.8, "nlev_p": 11.9},
+      {"frequency": 65, "beam": 17.1, "nlev_p": 8.9},
+      {"frequency": 75, "beam": 14.91, "nlev_p": 5.1},
+      {"frequency": 95, "beam": 11.7, "nlev_p": 4.6},
+      {"frequency": 115, "beam": 9.72, "nlev_p": 3.1},
+      {"frequency": 130, "beam": 8.59, "nlev_p": 3.1},
+      {"frequency": 145, "beam": 7.7, "nlev_p": 3.4},
+      {"frequency": 165, "beam": 6.77, "nlev_p": 2.5},
+      {"frequency": 190, "beam": 5.88, "nlev_p": 2.8},
+      {"frequency": 220, "beam": 5.08, "nlev_p": 3.3},
+      {"frequency": 275, "beam": 4.06, "nlev_p": 6.3},
+      {"frequency": 340, "beam": 3.28, "nlev_p": 11.4},
+      {"frequency": 390, "beam": 3.26, "nlev_p": 21.9},
+      {"frequency": 450, "beam": 2.86, "nlev_p": 43.4},
+      {"frequency": 520, "beam": 2.48, "nlev_p": 102.0},
+      {"frequency": 600, "beam": 1.86, "nlev_p": 288.0},
+      {"frequency": 700, "beam": 1.59, "nlev_p": 1122.0},
+      {"frequency": 850, "beam": 1.31, "nlev_p": 9550.0}
+    ]
+  }
+  

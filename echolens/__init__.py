@@ -1,0 +1,1 @@
+from echolens.instrument import CMB_Bharat
