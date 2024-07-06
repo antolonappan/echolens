@@ -15,7 +15,7 @@ class NoiseSpectra:
         self.im = CMB_Bharat()
         
     def get_beam(self,idx):
-        return hp.gauss_beam(self.im.get_fwhm(idx=idx)/60, lmax=self.lmax)
+        return hp.gauss_beam(np.radians(self.im.get_fwhm(idx=idx)/60), lmax=self.lmax)
     
     def noise_T_idx(self,idx):
         return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
@@ -43,3 +43,10 @@ class NoiseSpectra:
         noise_p = self.noise_P()
         ilc_p = 1/np.sum(1/noise_p,axis=0)
         return np.array([ilc_t,ilc_p])
+    
+    def eqv_noise(self):
+        t = self.im.get_noise_t()
+        T =  cl2arc(1/sum(1/arc2cl(t)))
+        p = self.im.get_noise_p()
+        P =  cl2arc(1/sum(1/arc2cl(p)))
+        return np.array([T,P])
