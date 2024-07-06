@@ -50,3 +50,28 @@ class NoiseSpectra:
         p = self.im.get_noise_p()
         P =  cl2arc(1/sum(1/arc2cl(p)))
         return np.array([T,P])
+
+class GaussianNoiseMap:
+
+    def __init__(self,nside=1024) -> None:
+        self.nside = nside
+        self.im = CMB_Bharat()
+
+    
+    def noiseTQU(self,idx=None):
+        nlep = self.im.get_noise_p()
+        depth_p =np.array(nlep)
+        depth_i = depth_p/np.sqrt(2)
+        pix_amin2 = 4. * np.pi / float(hp.nside2npix(self.nside)) * (180. * 60. / np.pi) ** 2
+        sigma_pix_I = np.sqrt(depth_i ** 2 / pix_amin2)
+        sigma_pix_P = np.sqrt(depth_p ** 2 / pix_amin2)
+        npix = hp.nside2npix(self.nside)
+        noise = np.random.randn(len(depth_i), 3, npix)
+        noise[:, 0, :] *= sigma_pix_I[:, None]
+        noise[:, 1, :] *= sigma_pix_P[:, None]
+        noise[:, 2, :] *= sigma_pix_P[:, None]
+        if idx is not None:
+            return noise[idx]
+        else:
+            return noise
+    
