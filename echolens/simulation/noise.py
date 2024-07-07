@@ -10,18 +10,24 @@ def cl2arc(cl):
 
 class NoiseSpectra:
 
-    def __init__(self,lmax=4096) -> None:
+    def __init__(self,lmax=3071) -> None:
         self.lmax = lmax
         self.im = CMB_Bharat()
         
     def get_beam(self,idx):
         return hp.gauss_beam(np.radians(self.im.get_fwhm(idx=idx)/60), lmax=self.lmax)
     
-    def noise_T_idx(self,idx):
-        return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
+    def noise_T_idx(self,idx,deconvolve=True):
+        if deconvolve:
+            return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
+        else:
+            return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) 
     
-    def noise_P_idx(self,idx):
-        return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
+    def noise_P_idx(self,idx,deconvolve=True):
+        if deconvolve:
+            return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
+        else:
+            return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1))
     
     def noise_T(self):
         freqs = len(self.im.get_frequency())
@@ -53,9 +59,25 @@ class NoiseSpectra:
 
 class GaussianNoiseMap:
 
-    def __init__(self,nside=1024) -> None:
+    def __init__(self,nside=1024,decon=True) -> None:
         self.nside = nside
-        self.im = CMB_Bharat()
+        self.spectra = NoiseSpectra()
+        self.decon = decon
+
+    
+    def noise_alm_idx(self,idx):
+        nlt = self.spectra.noise_T_idx(idx,deconvolve=self.decon)
+        nlp = self.spectra.noise_P_idx(idx,deconvolve=self.decon)
+        return np.array([hp.synalm(nlt,lmax=self.spectra.lmax),
+                         hp.synalm(nlp,lmax=self.spectra.lmax),
+                         hp.synalm(nlp,lmax=self.spectra.lmax)])
+    
+    def noise_alms(self):
+        freqs = len(self.spectra.im.get_frequency())
+        noise = []
+        for i in range(freqs):
+            noise.append(self.noise_alm_idx(i))
+        return np.array(noise)
 
     
     def noiseTQU(self,idx=None):

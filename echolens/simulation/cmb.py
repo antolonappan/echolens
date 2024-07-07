@@ -120,6 +120,9 @@ class CMBlensed:
         del (alms, defl)
         return np.array([Tlen, Qlen, Ulen])
     
+    def get_lensed_alms(self,idx):
+        maps = self.get_lensed_TQU(idx)
+        return hp.map2alm(maps,lmax=self.lmax)
 
 
 
