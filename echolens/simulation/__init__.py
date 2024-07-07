@@ -2,7 +2,7 @@ from .cmb import CMBspectra
 from .noise import NoiseSpectra
 from .cmb import CMBlensed
 from .noise import GaussianNoiseMap
-from .fg import Foregrounds
+from .fg import Foregrounds, HILC
 from echolens import CMB_Bharat
 from tqdm import tqdm
 import healpy as hp
@@ -17,6 +17,7 @@ class CMBbharatSky:
         self.fg = Foregrounds(folder,nside,fg_model)
         self.im = CMB_Bharat()
         self.inc_fg = inc_fg
+        self.hilc = HILC()
 
     
     def observed_alms(self,idx):
@@ -30,5 +31,10 @@ class CMBbharatSky:
             else:
                 alms.append(cmb + self.noise.noise_alm_idx(v))
         return np.array(alms)
+    
+    def observed_cmb_alms(self,idx):
+        alms = self.observed_alms(idx)
+        lbins = np.arange(1000) * 10
+        return self.hilc.harmonic_ilc_alm(alms,lbins=lbins)
     
             

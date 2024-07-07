@@ -101,4 +101,17 @@ class HILC:
                                 * inv_std[..., np.newaxis]
                                 * inv_std[..., np.newaxis, :])
         return inv_cov * inv_std[..., np.newaxis] * inv_std[..., np.newaxis, :]
+    
+    def _apply_harmonic_W(self,W,  # (..., ell, comp, freq)
+                      alms):  # (freq, ..., lm)
+        lmax = hp.Alm.getlmax(alms.shape[-1])
+        res = np.full((W.shape[-2],) + alms.shape[1:], np.nan, dtype=alms.dtype)
+        start = 0
+        for i in range(0, lmax+1):
+            n_m = lmax + 1 - i
+            res[..., start:start+n_m] = np.einsum('...lcf,f...l->c...l',
+                                                W[..., i:, :, :],
+                                                alms[..., start:start+n_m])
+            start += n_m
+        return res
         

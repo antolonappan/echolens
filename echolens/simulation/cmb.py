@@ -86,7 +86,7 @@ class CMBlensed:
         self.dlmax = 1024 
         self.epsilon = 1e-6 
         self.lmax_unl, self.mmax_unl = self.lmax_len + self.dlmax, self.lmax_len + self.dlmax
-        assert self.lmax_unl >= len(self.cl_unl['tt'])-1, f"Spectra has not enough multipoles, increase lmax more than {self.lmax_unl}"
+        assert self.lmax_unl <= len(self.cl_unl['tt'])-1, f"Spectra has not enough multipoles, increase lmax more than {self.lmax_unl}"
     
     def set_seeds(self):
         nos = 1000
