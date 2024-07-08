@@ -4,6 +4,7 @@ import os
 import pickle as pl
 import healpy as hp
 import lenspyx
+from echolens.utils import synalm_c2
 
 ini_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "echo.ini")
 spectra = os.path.join(os.path.dirname(os.path.realpath(__file__)), "spectra.pkl")
@@ -64,6 +65,8 @@ class CMBspectra:
         if dtype == 'd':
             pow = {}
             pow['pp'] = powers[:, 0]
+            pow['pt'] = powers[:, 1]
+            pow['pe'] = powers[:, 2]
             return pow
         elif dtype == 'a':
             return powers
@@ -73,10 +76,17 @@ class CMBspectra:
 
 class CMBlensed:
 
-    def __init__(self,nside=1024):
+    def __init__(self,libdir,nside=1024,cache=True):
+        self.cmbdir = os.path.join(libdir,'cmb')
+        self.massdir = os.path.join(libdir,'mass')
+        self.hilcdir = os.path.join(libdir,'hilc')
+        os.makedirs(self.cmbdir,exist_ok=True)
+        os.makedirs(self.massdir,exist_ok=True)
+        os.makedirs(self.hilcdir,exist_ok=True)
+    
         self.spectra = CMBspectra()
         self.cl_unl = self.spectra.get_unlensed_spectra(dl=False,dtype='d')
-        self.cl_pp = self.spectra.get_lens_potential(dl=False,dtype='d')
+        self.cl_pot = self.spectra.get_lens_potential(dl=False,dtype='d')
         self.cmbseeds = None
         self.phiseeds = None
         self.nside = nside
@@ -87,11 +97,12 @@ class CMBlensed:
         self.epsilon = 1e-6 
         self.lmax_unl, self.mmax_unl = self.lmax_len + self.dlmax, self.lmax_len + self.dlmax
         assert self.lmax_unl <= len(self.cl_unl['tt'])-1, f"Spectra has not enough multipoles, increase lmax more than {self.lmax_unl}"
+        self.cache = cache
     
     def set_seeds(self):
         nos = 1000
-        self.cmbseeds = np.arange(1111,1111+nos)
-        self.phiseeds = np.arange(2222,2222+nos)
+        self.cmbseeds = np.arange(11111,11111+nos)
+        self.phiseeds = np.arange(22222,22222+nos)
 
     
     def get_unlensed_alms(self,idx):
@@ -104,9 +115,15 @@ class CMBlensed:
         return alms
     
     def get_phi_alms(self,idx):
-        np.random.seed(self.phiseeds[idx])
-        alms = hp.synalm(self.cl_pp['pp'], lmax=self.lmax_unl)
-        return alms
+        fname = os.path.join(self.massdir,f'phi_{idx:03}.fits')
+        if not os.path.isfile(fname):
+            np.random.seed(self.phiseeds[idx])
+            alms = hp.synalm(self.cl_pot['pp'], lmax=self.lmax_unl)
+            if self.cache:
+                hp.write_alm(fname,alms)
+            return alms
+        else:
+            return hp.read_alm(fname)
     
     def get_deflection(self,idx):
         alms = self.get_phi_alms(idx)
@@ -121,9 +138,45 @@ class CMBlensed:
         return np.array([Tlen, Qlen, Ulen])
     
     def get_lensed_alms(self,idx):
-        maps = self.get_lensed_TQU(idx)
-        return hp.map2alm(maps,lmax=self.lmax)
+        fname = os.path.join(self.cmbdir,f'lensed_{idx:03}.fits')
+        if not os.path.isfile(fname):
+            alms = hp.map2alm(self.get_lensed_TQU(idx),lmax=self.lmax)
+            if self.cache:
+                hp.write_alm(fname,alms)
+            return alms
+        else:
+            return hp.read_alm(fname, hdu=(1,2,3))
+    
 
+class CMBlensedISW(CMBlensed):
+
+    def __init__(self,nside=1024):
+        super().__init__(nside)
+
+    def get_unlensed_alms(self,idx):
+        Cls = [ self.cl_unl['tt'],
+                self.cl_unl['ee'],
+                self.cl_unl['bb'],
+                self.cl_unl['te']]
+        np.random.seed(self.cmbseeds[idx])
+        alms = hp.synalm(Cls, lmax=self.lmax_unl, new=True,)
+        plm = synalm_c2(self.cl_unl['tt'], alms[0], 
+                        self.cl_unl['ee'], alms[1], 
+                        self.cl_pot['pp'], 
+                        self.cl_pot['pt'], 
+                        self.cl_pot['pe'])
+        return alms, plm
+    
+    def get_deflection(self,alms):
+        return hp.almxfl(alms, np.sqrt(np.arange(self.lmax_unl + 1, dtype=float) * np.arange(1, self.lmax_unl + 2)), None, False)
+   
+    def get_lensed_TQU(self,idx):
+        alms,plm = self.get_unlensed_alms(idx)
+        defl = self.get_deflection(plm)
+        geom_info = ('healpix', {'nside':self.nside})
+        Tlen, Qlen, Ulen = lenspyx.alm2lenmap([alms[0], alms[1]], defl, geometry=geom_info, verbose=1, epsilon=self.epsilon)
+        del (alms, defl)
+        return np.array([Tlen, Qlen, Ulen])      
 
 
 
