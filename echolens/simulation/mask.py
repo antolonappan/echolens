@@ -9,9 +9,15 @@ class Mask:
         self.nside = nside
         self.which = {60:0,70:1,80:2,90:3}
 
-    def get_mask(self,fsky):
+    def get_mask(self,fsky,save=None):
+        fsky = int(fsky)
+        if fsky not in [60,70,80,90]:
+            raise ValueError('Invalid fsky. Choose between 60,70,80,90.')
         mask = hp.read_map(mask_file, self.which[fsky])
-        return hp.ud_grade(mask,self.nside)
+        if save:
+            hp.write_map(save,mask)
+        else:
+            return hp.ud_grade(mask,self.nside)
     
     @staticmethod
     def apodize_mask(mask, scale, method='hybrid', mult_factor=3, min_factor=0.1):

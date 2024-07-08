@@ -6,6 +6,8 @@ def arc2cl(arc):
     return np.radians(arc/60)**2
 def cl2arc(cl):
     return np.rad2deg(np.sqrt(cl))*60
+def ilcnoise(arr):
+    return cl2arc(1/sum(1/arc2cl(arr)))
 
 
 class NoiseSpectra:
@@ -56,6 +58,15 @@ class NoiseSpectra:
         p = self.im.get_noise_p()
         P =  cl2arc(1/sum(1/arc2cl(p)))
         return np.array([T,P])
+    
+    def eqv_beam(self):
+        Nt,Np = self.noise_ilc()
+        nnt = ilcnoise(self.im.get_noise_t())
+        nnp = ilcnoise(self.im.get_noise_p())
+        bl2t = np.radians(nnt/60)**2 / Nt
+        bl2p = np.radians(nnp/60)**2 / Np
+        return np.sqrt(np.array([bl2t,bl2p]))
+
 
 class GaussianNoiseMap:
 
