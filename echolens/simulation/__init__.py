@@ -4,6 +4,7 @@ from .cmb import CMBlensed
 from .cmb import CMBlensedISW
 from .noise import GaussianNoiseMap
 from .fg import Foregrounds, HILC
+from .mask import Mask
 from echolens import CMB_Bharat
 from tqdm import tqdm
 import healpy as hp
@@ -17,7 +18,7 @@ class CMBbharatSky:
         self.fgdir = os.path.join(libdir,'foregrounds')
         fg_str = ''.join(fg_model)
         fg_inc_str = 'inc_fg' if inc_fg else 'no_fg'
-        self.ilcdir = os.path.join(libdir,f'ilc_{fg_inc_str}' + fg_str if inc_fg else '')
+        self.ilcdir = os.path.join(libdir,f'ilc_{fg_inc_str}' + (fg_str if inc_fg else ''))
         os.makedirs(self.ilcdir,exist_ok=True)
         os.makedirs(self.fgdir,exist_ok=True)
         if inc_isw:
@@ -33,8 +34,8 @@ class CMBbharatSky:
 
     
     def observed_cmb_alms(self,idx):
-        fname_cmb = os.path.join(self.ilcdir,f'ilc_cmb_{idx}.fits')
-        fname_noise = os.path.join(self.ilcdir,f'ilc_noise_{idx}.fits')
+        fname_cmb = os.path.join(self.ilcdir,f'ilc_cmb_{idx:03}.fits')
+        fname_noise = os.path.join(self.ilcdir,f'ilc_noise_{idx:03}.fits')
         if os.path.isfile(fname_cmb) and os.path.isfile(fname_noise):
             return hp.read_alm(fname_cmb,hdu=(1,2,3)),hp.read_alm(fname_noise,hdu=(1,2,3))
         else:
