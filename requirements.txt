@@ -1,6 +1,0 @@
-camb
-lenspyx
-healpy
-numpy
-git+https://github.com/carronj/plancklens.git
-
