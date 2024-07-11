@@ -56,10 +56,9 @@ dependencies:
   - libcxx=17.0.6
   - libdeflate=1.20
   - libedit=3.1.20191231
-  - libev=4.33
+  - libev=4.33l
   - libevent=2.1.12
   - libffi=3.4.4
-  - libgfortran=5.0.0
   - libgfortran5=13.2.0
   - libhwloc=2.11.1
   - libiconv=1.17
