@@ -6,6 +6,7 @@ import os
 from tqdm import tqdm
 import numpy as np
 from numba import jit, njit
+from echolens import mpi
 
 class Foregrounds:
 

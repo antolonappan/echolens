@@ -10,6 +10,7 @@ from tqdm import tqdm
 import healpy as hp
 import numpy as np
 import os
+from echolens import mpi
 
 
 class CMBbharatSky:
