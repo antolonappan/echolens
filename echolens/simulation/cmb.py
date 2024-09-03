@@ -5,6 +5,7 @@ import pickle as pl
 import healpy as hp
 import lenspyx
 from echolens.utils import synalm_c2
+from echolens import mpi
 
 ini_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "echo.ini")
 spectra = os.path.join(os.path.dirname(os.path.realpath(__file__)), "spectra.pkl")
@@ -80,9 +81,11 @@ class CMBlensed:
         self.cmbdir = os.path.join(libdir,'cmb')
         self.massdir = os.path.join(libdir,'mass')
         self.hilcdir = os.path.join(libdir,'hilc')
-        os.makedirs(self.cmbdir,exist_ok=True)
-        os.makedirs(self.massdir,exist_ok=True)
-        os.makedirs(self.hilcdir,exist_ok=True)
+        if mpi.rank == 0:
+            os.makedirs(self.cmbdir,exist_ok=True)
+            os.makedirs(self.massdir,exist_ok=True)
+            os.makedirs(self.hilcdir,exist_ok=True)
+        mpi.barrier()
     
         self.spectra = CMBspectra()
         self.cl_unl = self.spectra.get_unlensed_spectra(dl=False,dtype='d')

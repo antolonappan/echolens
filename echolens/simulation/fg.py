@@ -12,7 +12,9 @@ class Foregrounds:
 
     def __init__(self,folder,nside,fg_model):
         self.folder = os.path.join(folder,''.join(fg_model))
-        os.makedirs(self.folder,exist_ok=True)
+        if mpi.rank == 0:
+            os.makedirs(self.folder,exist_ok=True)
+        mpi.barrier()
         self.nside = nside
         self.fg_model = fg_model
         self.freq = CMB_Bharat().get_frequency()
