@@ -5,5 +5,5 @@ echolens.quest
 .. automodule:: echolens.quest
    :members:
 
-.. autoclass:: CMBbharatQE
+.. autoclass:: echolens.quest.CMBbharatQE
    :members:

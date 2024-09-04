@@ -32,7 +32,7 @@ class CMBbharatQE:
                  cache=True,
                  
                  ):
-        r"""Class to handle the quadratic estimator for CMB lensing reconstruction.
+        """Class to handle the quadratic estimator for CMB lensing reconstruction.
 
         Args:
             libdir (str): Path to the directory where the output files will be saved.
@@ -63,7 +63,7 @@ class CMBbharatQE:
         self.sims = simulation.CMBbharatSky(libdir,nside,fg_model,inc_fg,inc_isw,cache)
 
         theory_bl = simulation.NoiseSpectra(lmax=self.lmax).eqv_beam()
-        transf =theory_bl * hp.pixwin(nside)[:self.lmax_ivf + 1]
+        transf =theory_bl * hp.pixwin(nside)[:self.lmax_cmb + 1]
 
         cl_len = simulation.CMBspectra(lmax=self.lmax).get_lensed_spectra()
 
@@ -94,13 +94,13 @@ class CMBbharatQE:
         self.ivfs   = filt_util.library_ftl(ivfs_raw, lmax_cmb, ftl, fel, fbl)
 
         qe_dir = os.path.join(self.qedir, 'qlms')
-        self.qlms = qest.library_sepTP(qe_dir, ivfs, ivfs,   cl_len['te'], nside, lmax_qlm=lmax_qlm)
+        self.qlms = qest.library_sepTP(qe_dir, self.ivfs, self.ivfs,   cl_len['te'], nside, lmax_qlm=self.lmax_recon)
 
         nhl_dir = os.path.join(self.qedir, 'nhl')
         self.nhl = nhl.nhl_lib_simple(nhl_dir, self.ivfs, cl_weight, self.lmax_recon)
 
         qresp_dir = os.path.join(self.qedir, 'qresp')
-        self.qresp = qresp.resp_lib_simple(qresp_dir, lmax_ivf, cl_weight, cl_len,
+        self.qresp = qresp.resp_lib_simple(qresp_dir, lmax_recon, cl_weight, cl_len,
                                  {'t': self.ivfs.get_ftl(), 'e':self.ivfs.get_fel(), 'b':self.ivfs.get_fbl()}, self.lmax_recon)
 
 
