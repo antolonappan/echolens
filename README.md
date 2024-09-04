@@ -12,7 +12,6 @@ or you can use the .yml files in the `conda` directory to setup the conda enviro
 # Install echolens
 To install and use the echolens package
 ```
-conda activate cosmos
 python setup.py develop
 ```
 
