@@ -1,6 +1,6 @@
-===============
-echolens.quest
-===============
+=====
+quest
+=====
 
 .. automodule:: echolens.quest
    :members:

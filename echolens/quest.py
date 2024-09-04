@@ -65,7 +65,7 @@ class CMBbharatQE:
         theory_bl = simulation.NoiseSpectra(lmax=self.lmax).eqv_beam()
         transf =theory_bl * hp.pixwin(nside)[:self.lmax_cmb + 1]
 
-        cl_len = simulation.CMBspectra(lmax=self.lmax).get_lensed_spectra()
+        cl_len = simulation.CMBspectra().get_lensed_spectra()
 
         cl_weight = copy.deepcopy(cl_len)
         cl_weight['bb'] *= 0.
@@ -74,14 +74,14 @@ class CMBbharatQE:
         self.set_mask()
 
         libdir_cinvt = os.path.join(self.qedir, 'cinv_t')
-        ninv_t = [self.sims.inv_noise_map_fname(50,'t') + self.maskpath] 
+        ninv_t = [self.sims.inv_noise_map_fname(50,'t')] + [self.maskpath] 
         cinv_t = filt_cinv.cinv_t(libdir_cinvt, lmax_cmb,nside, cl_len, transf, ninv_t,
                                 marge_monopole=True, marge_dipole=True, marge_maps=[])
 
 
 
         libdir_cinvp = os.path.join(self.qedir, 'cinv_p')
-        ninv_p = [self.sims.inv_noise_map_fname(50,'p') + self.maskpath]
+        ninv_p = [self.sims.inv_noise_map_fname(50,'p')] + [self.maskpath]
         cinv_p = filt_cinv.cinv_p(libdir_cinvp, lmax_cmb, nside, cl_len, transf, ninv_p)
 
 
