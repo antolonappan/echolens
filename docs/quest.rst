@@ -2,8 +2,8 @@
 quest
 =====
 
-.. automodule:: echolens.quest
-   :members:
+.. automodule:: quest
+   :members: 
 
-.. autoclass:: echolens.quest.CMBbharatQE
+.. autoclass:: CMBbharatQE
    :members:
