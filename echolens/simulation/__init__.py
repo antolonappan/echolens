@@ -39,7 +39,7 @@ class CMBbharatSky:
     
     @classmethod
     def from_file(cls,config):
-        config = toml.load(config)
+        config = toml.load(config)['simulation']
         return cls(config['libdir'],
                 config['nside'],
                 config['fg_model'],
