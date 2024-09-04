@@ -32,6 +32,21 @@ class CMBbharatQE:
                  cache=True,
                  
                  ):
+        r"""Class to handle the quadratic estimator for CMB lensing reconstruction.
+
+        Args:
+            libdir (str): Path to the directory where the output files will be saved.
+            nside (int): Resolution parameter of the HEALPix map.
+            fg_model (str): The foreground model to be used.
+            lmin_cmb (int): Minimum multipole to be considered in the CMB power spectrum.
+            lmax_cmb (int): Maximum multipole to be considered in the CMB power spectrum.
+            lmax_recon (int): Maximum multipole to be considered in the reconstruction.
+            fsky (float, optional): Fraction of the sky to be considered. Defaults to 0.8.
+            inc_fg (bool, optional): Include foregrounds in the simulation. Defaults to True.
+            inc_isw (bool, optional): Include the ISW effect in the simulation. Defaults to False.
+            cache (bool, optional): Cache the results. Defaults to True.
+        """
+           
         
         self.qedir = os.path.join(libdir,'qe')
         if mpi.rank == 0:
