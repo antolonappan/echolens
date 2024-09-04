@@ -7,5 +7,7 @@ API
 instrument
 ----------
 
-.. automodule:: echolens.instrument
+.. automodule:: echolens.instrument.model
    :members:
+   :undoc-members:
+   :show-inheritance:

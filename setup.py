@@ -13,6 +13,7 @@ setup(
     maintainer="Anto Idicherian Lonappan",
     maintainer_email="mail@antolonappan.me",  
     package_data={
-        'echolens.simulation': ['echo.ini', 'masks.fits', 'spectra.pkl'], 
+        'echolens.simulation': ['echo.ini', 'masks.fits', 'spectra.pkl'],
+        'echolens.instrument': ['IM.json'],
     },
 )
