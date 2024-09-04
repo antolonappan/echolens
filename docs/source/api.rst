@@ -1,13 +1,17 @@
-API
-===
+API Documentation
+=================
+
+This section contains the API documentation for the `echolens` package.
 
 .. automodule:: echolens
    :members:
 
-instrument
-----------
+Instrument Module
+-----------------
 
-.. automodule:: echolens.instrument.model
+The `CMB_Bharat` class is part of the `echolens.instrument` module. It provides methods for interacting with CMB data, including frequencies, beam sizes (FWHM), and noise levels (temperature and polarization).
+
+.. automodule:: echolens.instrument
    :members:
    :undoc-members:
    :show-inheritance:

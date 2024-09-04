@@ -15,30 +15,14 @@ class CMB_Bharat:
     ----------
     data : list
         A list containing information about different CMB frequency channels.
-
-    Methods
-    -------
-    get_frequency(idx=None):
-        Returns the frequency of a particular channel or all channels.
-    
-    get_fwhm(idx=None, freq=None):
-        Returns the beam Full Width at Half Maximum (FWHM) of a channel by index or frequency.
-    
-    get_noise_t(idx=None, freq=None):
-        Returns the noise temperature (T) of a channel by index or frequency.
-    
-    get_noise_p(idx=None, freq=None):
-        Returns the noise polarization (P) of a channel by index or frequency.
     """
 
     def __init__(self, data_file: str):
         """
         Initializes the CMB_Bharat class by loading data from the specified file.
 
-        Parameters
-        ----------
-        data_file : str
-            The path to the data file (in JSON format) containing CMB frequency channels and properties.
+        :param data_file: Path to the data file (in JSON format) containing CMB frequency channels and properties.
+        :type data_file: str
         """
         with open(data_file, "r") as file:
             data = json.load(file)
@@ -48,20 +32,11 @@ class CMB_Bharat:
         """
         Returns the frequency for a specific channel or all channels.
 
-        Parameters
-        ----------
-        idx : Optional[int], optional
-            Index of the specific channel (default is None, which returns all frequencies).
-
-        Returns
-        -------
-        Union[array, float]
-            The frequency of the specified channel, or an array of frequencies for all channels.
-        
-        Raises
-        ------
-        IndexError
-            If the provided index is out of range.
+        :param idx: Index of the specific channel. If None, returns frequencies for all channels.
+        :type idx: Optional[int], optional
+        :return: The frequency of the specified channel or an array of frequencies for all channels.
+        :rtype: Union[array, float]
+        :raises IndexError: If the provided index is out of range.
         """
         if idx is None:
             return array([entry["frequency"] for entry in self.data])
@@ -73,24 +48,14 @@ class CMB_Bharat:
         """
         Returns the FWHM (beam size) for a specific channel or all channels.
 
-        Parameters
-        ----------
-        idx : Optional[int], optional
-            Index of the specific channel (default is None).
-        freq : Optional[float], optional
-            Frequency to search for (default is None).
-
-        Returns
-        -------
-        Union[array, float]
-            The FWHM of the specified channel, or an array of FWHM values for all channels.
-        
-        Raises
-        ------
-        IndexError
-            If the provided index is out of range.
-        ValueError
-            If the provided frequency is not found.
+        :param idx: Index of the specific channel. If None, it checks the frequency.
+        :type idx: Optional[int], optional
+        :param freq: Frequency to search for. If None, returns FWHM for all channels.
+        :type freq: Optional[float], optional
+        :return: The FWHM of the specified channel or an array of FWHM values for all channels.
+        :rtype: Union[array, float]
+        :raises IndexError: If the provided index is out of range.
+        :raises ValueError: If the provided frequency is not found.
         """
         if idx is not None:
             if 0 <= idx < len(self.data):
@@ -107,17 +72,12 @@ class CMB_Bharat:
         """
         Returns the noise temperature for a specific channel or all channels.
 
-        Parameters
-        ----------
-        idx : Optional[int], optional
-            Index of the specific channel (default is None).
-        freq : Optional[float], optional
-            Frequency to search for (default is None).
-
-        Returns
-        -------
-        Union[array, float]
-            The noise temperature of the specified channel, or an array of noise temperatures for all channels.
+        :param idx: Index of the specific channel. If None, it checks the frequency.
+        :type idx: Optional[int], optional
+        :param freq: Frequency to search for. If None, returns noise temperatures for all channels.
+        :type freq: Optional[float], optional
+        :return: The noise temperature of the specified channel or an array of noise temperatures for all channels.
+        :rtype: Union[array, float]
         """
         return self.get_noise_p(idx, freq) / sqrt(2)
 
@@ -125,24 +85,14 @@ class CMB_Bharat:
         """
         Returns the noise polarization for a specific channel or all channels.
 
-        Parameters
-        ----------
-        idx : Optional[int], optional
-            Index of the specific channel (default is None).
-        freq : Optional[float], optional
-            Frequency to search for (default is None).
-
-        Returns
-        -------
-        Union[array, float]
-            The noise polarization of the specified channel, or an array of noise polarization values for all channels.
-        
-        Raises
-        ------
-        IndexError
-            If the provided index is out of range.
-        ValueError
-            If the provided frequency is not found.
+        :param idx: Index of the specific channel. If None, it checks the frequency.
+        :type idx: Optional[int], optional
+        :param freq: Frequency to search for. If None, returns noise polarization for all channels.
+        :type freq: Optional[float], optional
+        :return: The noise polarization of the specified channel or an array of noise polarization values for all channels.
+        :rtype: Union[array, float]
+        :raises IndexError: If the provided index is out of range.
+        :raises ValueError: If the provided frequency is not found.
         """
         if idx is not None:
             if 0 <= idx < len(self.data):
