@@ -4,8 +4,13 @@
 
 import os
 import sys
+
+sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.append(os.path.abspath('../echolens'))
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../echolens'))
+sys.path.insert(0, os.path.abspath('../../echolens/instrument'))
+sys.path.insert(0, os.path.abspath('../../echolens/simulation'))
 
 source_suffix = '.rst'
 master_doc = 'index'
