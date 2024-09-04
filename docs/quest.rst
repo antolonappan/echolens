@@ -2,7 +2,7 @@
 echolens.quest
 ===============
 
-.. automodule:: quest
+.. automodule:: echolens.quest
    :members:
 
 .. autoclass:: CMBbharatQE
