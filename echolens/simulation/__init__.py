@@ -15,6 +15,7 @@ import numpy as np
 import os
 from echolens import mpi
 import toml
+from typing import List, Optional, Union
 
 
 class CMBbharatSky:
@@ -36,7 +37,13 @@ class CMBbharatSky:
 
     """
 
-    def __init__(self,libdir,nside,fg_model,inc_fg=True,inc_isw=False,cache=True):
+    def __init__(self, 
+                 libdir : str,
+                 nside : int,
+                 fg_model : List[str],
+                 inc_fg : Optional[bool] = False,
+                 inc_isw : Optional[bool] = False,
+                 cache : Optional[bool] = False) -> None:
         """
         Initializes the CMB_Bharat class by loading data from the specified file.
         """
@@ -61,7 +68,7 @@ class CMBbharatSky:
         self.nside = nside
     
     @classmethod
-    def from_file(cls,config):
+    def from_file(cls,config : str) -> 'CMBbharatSky':
         """
         This class method is used to create an instance of the CMBbharatSky class from a configuration file.
 
@@ -79,7 +86,7 @@ class CMBbharatSky:
                 config['cache'])
 
     
-    def observed_cmb_alms(self,idx):
+    def observed_cmb_alms(self,idx : int) -> tuple:
         """
         This method is used to get the observed CMB alms. It returns the Harmonic ILC results, both CMB and Noise.
 
@@ -113,7 +120,7 @@ class CMBbharatSky:
 
             return results[0],ilc_noise[0]
         
-    def noise_alms(self,idx):
+    def noise_alms(self,idx : int) -> list:
         """
         The attribute noise_alms is used to read the noise alms from the file.
 
@@ -126,7 +133,7 @@ class CMBbharatSky:
         fname_noise = os.path.join(self.ilcdir,f'ilc_noise_{idx:03}.fits')
         return hp.read_alm(fname_noise,hdu=(1,2,3))
     
-    def noise_map(self,idx):
+    def noise_map(self,idx : int) -> list:
         """
         The attribute noise_map is used to read the noise map from the file.
 
@@ -139,7 +146,7 @@ class CMBbharatSky:
         noise = self.noise_alms(idx)
         return hp.alm2map(noise,nside=self.nside)
     
-    def inv_noise_map_fname(self,n,key):
+    def inv_noise_map_fname(self,n : int,key : str) -> str:
         """
         The attribute inv_noise_map_fname is used to get the file name of the inverse variance map.
 
@@ -153,7 +160,7 @@ class CMBbharatSky:
         """
         return os.path.join(self.ilcdir,f'inv_noise_{n}_{key}.fits')
 
-    def ivar_noise_map(self,n=100,key='t'):
+    def ivar_noise_map(self,n : int=100,key : str='t') -> list:
         """
         The attribute ivar_noise_map is used to get the inverse variance map.
 
@@ -225,7 +232,7 @@ class CMBbharatSky:
         del elm,blm
         return Q ,U
     
-    def make_sims(self,n):
+    def make_sims(self,n : int) -> None:
         """
         The attribute make_sims is used to make the simulations.
 

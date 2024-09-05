@@ -36,7 +36,7 @@ echolens.simulation.CMBbharatSky
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: echolens.simulation.CMBbharatSky
-   :members:
+   :members: from_file, observed_cmb_alms
    :show-inheritance:
    :inherited-members:
 

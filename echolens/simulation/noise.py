@@ -1,13 +1,7 @@
 from echolens import CMB_Bharat
 import numpy as np
 import healpy as hp
-
-def arc2cl(arc):
-    return np.radians(arc/60)**2
-def cl2arc(cl):
-    return np.rad2deg(np.sqrt(cl))*60
-def ilcnoise(arr):
-    return cl2arc(1/sum(1/arc2cl(arr)))
+from echolens.utils import arc2cl, cl2arc, ilcnoise
 
 
 class NoiseSpectra:

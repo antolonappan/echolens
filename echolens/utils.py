@@ -66,3 +66,11 @@ def cut_alms(alms,lmax_new):
     for i in range(len(alms)):
         alms_new.append(slice_alms(alms[i],lmax_new))  
     return alms_new
+
+
+def arc2cl(arc):
+    return np.radians(arc/60)**2
+def cl2arc(cl):
+    return np.rad2deg(np.sqrt(cl))*60
+def ilcnoise(arr):
+    return cl2arc(1/sum(1/arc2cl(arr)))
