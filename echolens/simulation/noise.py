@@ -1,59 +1,131 @@
+"""
+This module contains classes to simulate noise in the CMB maps.
+"""
 from echolens import CMB_Bharat
 import numpy as np
 import healpy as hp
 from echolens.utils import arc2cl, cl2arc, ilcnoise
+from typing import Optional
 
 
 class NoiseSpectra:
+    """
+    This class is used to get the noise spectra for the CMB Bharat instrument model.
 
-    def __init__(self,lmax=3071) -> None:
+    :param lmax: The maximum multipole moment.
+    :type lmax: int
+
+    """
+
+    def __init__(self,lmax : Optional[int] = 3071) -> None:
         self.lmax = lmax
         self.im = CMB_Bharat()
         
-    def get_beam(self,idx):
+    def get_beam(self,idx : int) -> np.ndarray:
+        """
+        Returns the beam size for a specific channel.
+        
+        :param idx: Index of the specific channel.
+        :type idx: int
+        :return: The beam size for the specified channel.
+        :rtype: np.ndarray
+        """
         return hp.gauss_beam(np.radians(self.im.get_fwhm(idx=idx)/60), lmax=self.lmax)
     
-    def noise_T_idx(self,idx,deconvolve=True):
+    def noise_T_idx(self,idx : int,deconvolve : Optional[bool] = True) -> np.ndarray:
+        """
+        Returns the noise power spectrum for the temperature for a specific channel.
+
+        :param idx: Index of the specific channel.
+        :type idx: int
+        :param deconvolve: If True, the beam is deconvolved from the noise power spectrum.
+        :type deconvolve: Optional[bool], optional
+        :return: The noise power spectrum for the temperature for the specified channel.
+        :rtype: np.ndarray
+        """
         if deconvolve:
             return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
         else:
             return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) 
     
-    def noise_P_idx(self,idx,deconvolve=True):
+    def noise_P_idx(self,idx : int, deconvolve : Optional[bool] = True) -> np.ndarray:
+        """
+        Returns the noise power spectrum for the polarization for a specific channel.
+
+        :param idx: Index of the specific channel.
+        :type idx: int
+        :param deconvolve: If True, the beam is deconvolved from the noise power spectrum.
+        :type deconvolve: Optional[bool], optional
+        :return: The noise power spectrum for the polarization for the specified channel.
+        :rtype: np.ndarray
+        """
+
         if deconvolve:
             return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
         else:
             return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1))
     
-    def noise_T(self):
+    def noise_T(self) -> np.ndarray:
+        """
+        Returns the noise power spectrum for the temperature for all channels.
+
+        :return: The noise power spectrum for the temperature for all channels.
+        :rtype: np.ndarray
+        """
         freqs = len(self.im.get_frequency())
         noise = np.zeros((freqs,self.lmax+1))
         for i in range(freqs):
             noise[i] = self.noise_T_idx(i)
         return noise
     
-    def noise_P(self):
+    def noise_P(self) -> np.ndarray:
+        """
+        Returns the noise power spectrum for the polarization for all channels.
+
+        :return: The noise power spectrum for the polarization for all channels.
+        :rtype: np.ndarray
+        """
         freqs = len(self.im.get_frequency())
         noise = np.zeros((freqs,self.lmax+1))
         for i in range(freqs):
             noise[i] = self.noise_P_idx(i)
         return noise
     
-    def noise_ilc(self):
+    def noise_ilc(self) -> np.ndarray:
+        """
+        Returns the inverse noise power spectrum for the temperature and polarization.
+        
+        :return: The inverse noise power spectrum for the temperature and polarization.
+        :rtype: np.ndarray
+        """
         noise_t = self.noise_T()
         ilc_t = 1/np.sum(1/noise_t,axis=0)
         noise_p = self.noise_P()
         ilc_p = 1/np.sum(1/noise_p,axis=0)
         return np.array([ilc_t,ilc_p])
     
-    def eqv_noise(self):
+    def eqv_noise(self) -> np.ndarray:
+        """
+        Returns the equivalent noise power spectrum for the temperature and polarization.
+
+        :return: The equivalent noise power spectrum for the temperature and polarization.
+        :rtype: np.ndarray
+        """
+    
         t = self.im.get_noise_t()
         T =  cl2arc(1/sum(1/arc2cl(t)))
         p = self.im.get_noise_p()
         P =  cl2arc(1/sum(1/arc2cl(p)))
         return np.array([T,P])
     
-    def eqv_beam(self):
+    def eqv_beam(self) -> np.ndarray:
+        """
+        Returns the equivalent beam size for the temperature and polarization.
+
+        :return: The equivalent beam size for the temperature and polarization.
+        :rtype: np.ndarray
+        """
+
         Nt,Np = self.noise_ilc()
         nnt = ilcnoise(self.im.get_noise_t())
         nnp = ilcnoise(self.im.get_noise_p())
@@ -63,21 +135,44 @@ class NoiseSpectra:
 
 
 class GaussianNoiseMap:
+    """
+    This class is used to generate Gaussian noise maps for the CMB Bharat instrument model.
 
-    def __init__(self,nside=1024,decon=True) -> None:
+    :param nside: The resolution parameter.
+    :type nside: int
+    :param decon: If True, the beam is deconvolved from the noise maps.
+    :type decon: Optional[bool], optional
+
+    """
+
+    def __init__(self,nside : int,decon : Optional[bool] = True) -> None:
         self.nside = nside
         self.spectra = NoiseSpectra()
         self.decon = decon
 
     
-    def noise_alm_idx(self,idx):
+    def noise_alm_idx(self,idx : int) -> np.ndarray:
+        """
+        Returns the noise alm for a specific channel.
+
+        :param idx: Index of the specific channel.
+        :type idx: int
+        :return: The noise alm for the specified channel.
+        :rtype: np.ndarray
+        """
         nlt = self.spectra.noise_T_idx(idx,deconvolve=self.decon)
         nlp = self.spectra.noise_P_idx(idx,deconvolve=self.decon)
         return np.array([hp.synalm(nlt,lmax=self.spectra.lmax),
                          hp.synalm(nlp,lmax=self.spectra.lmax),
                          hp.synalm(nlp,lmax=self.spectra.lmax)])
     
-    def noise_alms(self):
+    def noise_alms(self) -> np.ndarray:
+        """
+        Returns the noise alms for all channels.
+
+        :return: The noise alms for all channels.
+        :rtype: np.ndarray
+        """
         freqs = len(self.spectra.im.get_frequency())
         noise = []
         for i in range(freqs):
@@ -85,7 +180,15 @@ class GaussianNoiseMap:
         return np.array(noise)
 
     
-    def noiseTQU(self,idx=None):
+    def noiseTQU(self,idx : Optional[int] = None) -> np.ndarray:
+        """
+        Returns the noise maps for the temperature and polarization.
+        
+        :param idx: Index of the specific channel. If None, returns noise maps for all channels.
+        :type idx: Optional[int], optional
+        :return: The noise maps for the temperature and polarization.
+        :rtype: np.ndarray
+        """
         nlep = self.im.get_noise_p()
         depth_p =np.array(nlep)
         depth_i = depth_p/np.sqrt(2)

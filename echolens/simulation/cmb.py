@@ -9,6 +9,7 @@ import healpy as hp
 import lenspyx
 from echolens.utils import synalm_c2
 from echolens import mpi
+from typing import Optional, Union
 
 ini_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "echo.ini")
 spectra = os.path.join(os.path.dirname(os.path.realpath(__file__)), "spectra.pkl")
@@ -142,7 +143,7 @@ class CMBlensed:
 
     """
 
-    def __init__(self,libdir,nside=1024,cache=True):
+    def __init__(self,libdir : str,nside : Optional[int] = 1024,cache : Optional[bool] = True) -> None:
         self.cmbdir = os.path.join(libdir,'cmb')
         self.massdir = os.path.join(libdir,'mass')
         self.hilcdir = os.path.join(libdir,'hilc')
@@ -261,9 +262,19 @@ class CMBlensed:
     
 
 class CMBlensedISW(CMBlensed):
+    """
+    This class is used to generate lensed CMB maps with ISW effect.
 
-    def __init__(self,nside=1024):
-        super().__init__(nside)
+    :param libdir: The directory to store the simulation data.
+    :type libdir: str
+    :param nside: The resolution of the maps.
+    :type nside: int
+    :param cache: If True, the simulation data is cached.
+    :type cache: bool
+    """
+
+    def __init__(self, libdir : str, nside : Optional[int] = 1024, cache : Optional[bool] = True) -> None:
+        super().__init__(libdir, nside, cache)
 
     def get_unlensed_alms(self,idx):
         Cls = [ self.cl_unl['tt'],

@@ -174,7 +174,7 @@ class CMBbharatSky:
         """
         return os.path.join(self.ilcdir,f'inv_noise_{n}_{key}.fits')
 
-    def ivar_noise_map(self,n : int=100,key : str='t') -> list:
+    def ivar_noise_map(self,n : int=100,key :  Optional[str] = 't') -> list:
         """
         The attribute ivar_noise_map is used to get the inverse variance map.
 
