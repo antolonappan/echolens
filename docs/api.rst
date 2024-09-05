@@ -33,7 +33,7 @@ echolens.instrument.model
    :inherited-members:
 
 echolens.simulation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: echolens.simulation
    :members:

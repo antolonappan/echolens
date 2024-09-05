@@ -46,6 +46,19 @@ class CMBbharatSky:
                  cache : Optional[bool] = False) -> None:
         """
         Initializes the CMB_Bharat class by loading data from the specified file.
+
+        :param libdir: The directory where the simulation data is stored.
+        :type libdir: str
+        :param nside: The resolution of the HEALPix map.
+        :type nside: int
+        :param fg_model: The foreground model to be used in the simulation.
+        :type fg_model: list
+        :param inc_fg: If True, the simulation includes foregrounds.
+        :type inc_fg: bool
+        :param inc_isw: If True, the simulation includes the ISW effect.
+        :type inc_isw: bool
+        :param cache: If True, the simulation data is cached.
+        :type cache: bool
         """
         self.fgdir = os.path.join(libdir,'foregrounds')
         self.__fg_str__ = ''.join(fg_model)

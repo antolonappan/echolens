@@ -3,14 +3,6 @@ This module contains the CMB_Bharat class, which is used to get the Instrument M
 
 The data is loaded from a JSON file, which is stored in the same directory as this file.
 
-Example
--------
-To get the frequency of the first channel:
-
-.. code-block:: python
-    >>> from echolens.instrument import CMB_Bharat
-    >>> instrument = CMB_Bharat()
-    >>> frequency = instrument.get_frequency(0)
 """
 
 from json import load
@@ -25,6 +17,14 @@ class CMB_Bharat:
     """
     A class to handle data related to CMB Bharat frequencies, beam sizes, 
     and noise levels.
+    Example
+    -------
+    To get the frequency of the first channel:
+
+    .. code-block:: python
+        >>> from echolens.instrument import CMB_Bharat
+        >>> instrument = CMB_Bharat()
+        >>> frequency = instrument.get_frequency(0)
     """
 
     def __init__(self):
