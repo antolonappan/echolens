@@ -1,9 +1,34 @@
 API Documentation
-=================
+==================
 
-This section contains the API documentation for the `echolens` package.
+This section provides the API reference for the `echolens` package.
 
 .. toctree::
    :maxdepth: 2
-   
-   quest
+   :caption: Contents:
+   :name: api-reference
+
+   generated/modules
+
+Package Overview
+----------------
+
+.. autosummary::
+   :toctree: generated
+   :caption: Modules
+   :nosignatures:
+
+   echolens.instrument.model
+
+Module Details
+--------------
+
+echolens.instrument.model
+~~~~~~~~~~~~~~~~~
+
+.. automodule:: echolens.instrument.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :inherited-members:
+

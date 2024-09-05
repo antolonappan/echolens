@@ -1,4 +1,8 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
 [project]
 name = "echolens"
-authors = [{name = "Anto I Lonappan", email = "mail@antolonappan.me"}]
+authors = [{name = "Anto I. Lonappan", email = "antolonappan@icloud.com"}]
 dynamic = ["version", "description"]

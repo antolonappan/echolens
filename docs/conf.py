@@ -1,50 +1,32 @@
-# Configuration file for the Sphinx documentation builder.
-
-# -- Project information
-
-import os
 import sys
-
-sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('..'))
+import os
 sys.path.insert(0, os.path.abspath('../echolens'))
-sys.path.insert(0, os.path.abspath('../echolens/instrument'))
-sys.path.insert(0, os.path.abspath('../echolens/simulation'))
 
-source_suffix = '.rst'
-master_doc = 'index'
-
-project = 'echolens'
-copyright = '2024, antolonappan'
-author = 'Anto I Lonappan'
-
-release = '0.1'
-version = '0.1.0'
-
-# -- General configuration
+project = "CMB Lensing analysis pipeline for CMB Bharat"
+copyright = "2024, antolonappan"
+author = "Anto Idicherian Lonappan"
 
 extensions = [
-    'sphinx.ext.duration',
-    'sphinx.ext.doctest',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
+    "sphinx.ext.duration",
+    "sphinx.ext.doctest",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
+    "nbsphinx",
 ]
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
+    "rtd": ("https://docs.readthedocs.io/en/stable/", None),
+    "python": ("https://docs.python.org/3/", None),
+    "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
 }
-intersphinx_disabled_domains = ['std']
+intersphinx_disabled_domains = ["std"]
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
-# -- Options for HTML output
+epub_show_urls = "footnote"
 
-html_theme = 'sphinx_rtd_theme'
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-# -- Options for EPUB output
-epub_show_urls = 'footnote'
-
-autoclass_content = 'both'
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]

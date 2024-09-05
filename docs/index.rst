@@ -1,9 +1,11 @@
 Welcome to ECHOlens' documentation!
 ===================================
 
-ECHOlens is a Python package for simulation of CMB bharat space mission. The package contains, lensed CMB maps, foregrounds, reconstruction of the lensing potential and other analysis tools. 
+**echolens** is a Python library for simulation and analyis of CMB observation with the CMB Bharat space mission.
+This package contains, CMB lensing simulation, foreground simulation, Harmoinic ILC cleaning, and CMB lensing analysis.
 
-Check out the :doc:`usage` section for further information, including how to :doc:`installation` the project.
+Check out the :doc:`usage` section for further information, including
+how to :ref:`installation` the project.
 
 .. note::
 
@@ -13,10 +15,7 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
 
-   installation
+   Home <self>
    usage
    api
-

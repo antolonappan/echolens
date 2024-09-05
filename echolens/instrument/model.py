@@ -1,3 +1,16 @@
+"""
+This module contains the CMB_Bharat class, which is used to get the Instrument Model parameters such as frequency, beam size, and noise levels.
+
+The data is loaded from a JSON file, which is stored in the same directory as this file.
+
+Example
+-------
+To get the frequency of the first channel:
+>>> from echolens.instrument import CMB_Bharat
+>>> instrument = CMB_Bharat()
+>>> frequency = instrument.get_frequency(0)
+"""
+
 from json import load
 from os import path as os_path
 from numpy import array, sqrt
@@ -8,24 +21,17 @@ data_file = os_path.join(os_path.dirname(os_path.realpath(__file__)), "IM.json")
 
 class CMB_Bharat:
     """
-    A class to handle data related to CMB (Cosmic Microwave Background) frequencies, beam sizes, 
-    and noise levels for a specific experiment.
-
-    Attributes
-    ----------
-    data : list
-        A list containing information about different CMB frequency channels.
+    A class to handle data related to CMB Bharat frequencies, beam sizes, 
+    and noise levels.
     """
 
-    def __init__(self, data_file: str):
+    def __init__(self):
         """
         Initializes the CMB_Bharat class by loading data from the specified file.
-
-        :param data_file: Path to the data file (in JSON format) containing CMB frequency channels and properties.
-        :type data_file: str
         """
+
         with open(data_file, "r") as file:
-            data = json.load(file)
+            data = load(file)
             self.data = data["data"]
 
     def get_frequency(self, idx: Optional[int] = None) -> Union[array, float]:
