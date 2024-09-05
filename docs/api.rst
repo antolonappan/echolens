@@ -19,6 +19,7 @@ Package Overview
    :nosignatures:
 
    echolens.instrument.model
+   echolens.simulation.CMBbharatSky
 
 Module Details
 --------------
