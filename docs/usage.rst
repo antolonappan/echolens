@@ -45,7 +45,7 @@ To import the package, run the following command in python:
 
    >>> import echolens
    >>> print(echolens.__version__)
-   >>> echolens.CMB_bharat().get_frequency()
+   >>> echolens.CMB_Bharat().get_frequency()
 
 Now you are ready to use the package and try the examples in the notebooks.
 
