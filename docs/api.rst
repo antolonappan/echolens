@@ -19,7 +19,8 @@ Package Overview
    :nosignatures:
 
    echolens.instrument.model
-   echolens.simulation
+   echolens.simulation.sims
+   echolens.simulation.cmb
 
 Module Details
 --------------
@@ -35,7 +36,12 @@ echolens.instrument.model
 echolens.simulation
 ~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: echolens.simulation
+.. automodule:: echolens.simulation.sims
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+.. automodule:: echolens.simulation.cmb
    :members:
    :show-inheritance:
    :inherited-members:
