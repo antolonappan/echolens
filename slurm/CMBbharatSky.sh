@@ -1,16 +1,13 @@
 #!/bin/bash
 #SBATCH --qos=debug
 #SBATCH --constraint=cpu
-#SBATCH --nodes=8
-#SBATCH --ntasks=250
+#SBATCH --nodes=4
+#SBATCH --ntasks=100
 #SBATCH --cpus-per-task=1
-#SBATCH -J LBIRD-FG0
-#SBATCH -o out/fg0.out
-#SBATCH -e out/fg0.err
+#SBATCH -J ECHO
+#SBATCH -o sky.out
+#SBATCH -e sky.err
 #SBATCH --time=00:30:00
-#SBATCH --mail-type=begin,end,fail
-#SBATCH --mail-user=anto.lonappan@sissa.it
-
 
 module load python
 conda activate cosmos

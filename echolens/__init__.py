@@ -6,4 +6,3 @@ __version__ = "0.1"
 
 from echolens.instrument import CMB_Bharat
 import echolens.utils as utils
-from echolens.simulation import Mask
