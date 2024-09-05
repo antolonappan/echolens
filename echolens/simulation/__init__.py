@@ -1,3 +1,6 @@
+"""
+This module contains the class CMBbharatSky which is used to simulate the CMB observation sky with foregrounds and noise.
+"""
 from .cmb import CMBspectra
 from .noise import NoiseSpectra
 from .cmb import CMBlensed
@@ -15,6 +18,23 @@ import toml
 
 
 class CMBbharatSky:
+    """
+    This class is used to simulate the CMB observation sky with foregrounds and noise.
+
+    :param libdir: The directory where the simulation data is stored.
+    :type libdir: str
+    :param nside: The resolution of the HEALPix map.
+    :type nside: int
+    :param fg_model: The foreground model to be used in the simulation.
+    :type fg_model: list
+    :param inc_fg: If True, the simulation includes foregrounds.
+    :type inc_fg: bool
+    :param inc_isw: If True, the simulation includes the ISW effect.
+    :type inc_isw: bool
+    :param cache: If True, the simulation data is cached.
+    :type cache: bool
+
+    """
 
     def __init__(self,libdir,nside,fg_model,inc_fg=True,inc_isw=False,cache=True):
         self.fgdir = os.path.join(libdir,'foregrounds')
@@ -39,6 +59,14 @@ class CMBbharatSky:
     
     @classmethod
     def from_file(cls,config):
+        """
+        This class method is used to create an instance of the CMBbharatSky class from a configuration file.
+
+        :param config: The path to the configuration file.
+        :type config: str
+
+        """
+
         config = toml.load(config)['simulation']
         return cls(config['libdir'],
                 config['nside'],
@@ -49,6 +77,15 @@ class CMBbharatSky:
 
     
     def observed_cmb_alms(self,idx):
+        """
+        This method is used to get the observed CMB alms. It returns the Harmonic ILC results, both CMB and Noise.
+
+        :param idx: The index of the simulation.
+        :type idx: int
+
+        :return: The CMB and Noise alms.
+        :rtype: tuple
+        """
         fname_cmb = os.path.join(self.ilcdir,f'ilc_cmb_{idx:03}.fits')
         fname_noise = os.path.join(self.ilcdir,f'ilc_noise_{idx:03}.fits')
         if os.path.isfile(fname_cmb) and os.path.isfile(fname_noise):
@@ -74,17 +111,57 @@ class CMBbharatSky:
             return results[0],ilc_noise[0]
         
     def noise_alms(self,idx):
+        """
+        The attribute noise_alms is used to read the noise alms from the file.
+
+        :param idx: The index of the simulation.
+        :type idx: int
+
+        :return: The noise alms.
+        :rtype: list
+        """
         fname_noise = os.path.join(self.ilcdir,f'ilc_noise_{idx:03}.fits')
         return hp.read_alm(fname_noise,hdu=(1,2,3))
     
     def noise_map(self,idx):
+        """
+        The attribute noise_map is used to read the noise map from the file.
+
+        :param idx: The index of the simulation.
+        :type idx: int
+
+        :return: The noise map.
+        :rtype: list
+        """
         noise = self.noise_alms(idx)
         return hp.alm2map(noise,nside=self.nside)
     
     def inv_noise_map_fname(self,n,key):
+        """
+        The attribute inv_noise_map_fname is used to get the file name of the inverse variance map.
+
+        :param n: The number of simulations.
+        :type n: int
+        :param key: The key for the map, either 't' or 'p'.
+        :type key: str 
+
+        :return: The file name of the inverse variance map.
+        :rtype: str
+        """
         return os.path.join(self.ilcdir,f'inv_noise_{n}_{key}.fits')
 
     def ivar_noise_map(self,n=100,key='t'):
+        """
+        The attribute ivar_noise_map is used to get the inverse variance map.
+
+        :param n: The number of simulations.
+        :type n: int
+        :param key: The key for the map, either 't' or 'p'.
+        :type key: str
+
+        :return: The inverse variance map.
+        :rtype: list
+        """
         fname = self.inv_noise_map_fname(n,key)
         if os.path.isfile(fname):
             return hp.read_map(fname)
@@ -146,6 +223,12 @@ class CMBbharatSky:
         return Q ,U
     
     def make_sims(self,n):
+        """
+        The attribute make_sims is used to make the simulations.
+
+        :param n: The number of simulations.
+        :type n: int
+        """
         if mpi.size < 2:
             for i in tqdm(range(n)):
                 self.observed_cmb_alms(i)
