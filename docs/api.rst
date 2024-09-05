@@ -19,7 +19,8 @@ Package Overview
    :nosignatures:
 
    echolens.instrument.model
-   echolens.simulation
+   echolens.simulation.sims
+   echolens.simulation.cmb
 
 Module Details
 --------------
