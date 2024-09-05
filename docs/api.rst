@@ -29,7 +29,6 @@ echolens.instrument.model
 
 .. automodule:: echolens.instrument.model
    :members:
-   :undoc-members:
    :show-inheritance:
    :inherited-members:
 
