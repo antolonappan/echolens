@@ -33,13 +33,16 @@ echolens.instrument.model
    :show-inheritance:
    :inherited-members:
 
-echolens.simulation
-~~~~~~~~~~~~~~~~~~~
+echolens.simulation.sims
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: echolens.simulation.sims
    :members:
    :show-inheritance:
    :inherited-members:
+
+echolens.simulation.cmb
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: echolens.simulation.cmb
    :members:
