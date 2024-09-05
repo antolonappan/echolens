@@ -19,7 +19,7 @@ Package Overview
    :nosignatures:
 
    echolens.instrument.model
-   echolens.simulation.CMBbharatSky
+   echolens.simulation
 
 Module Details
 --------------
@@ -32,11 +32,13 @@ echolens.instrument.model
    :show-inheritance:
    :inherited-members:
 
-echolens.simulation.CMBbharatSky
+echolens.simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: echolens.simulation.CMBbharatSky
    :members: from_file, observed_cmb_alms
    :show-inheritance:
    :inherited-members:
+
+   
 
