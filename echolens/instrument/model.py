@@ -6,6 +6,7 @@ The data is loaded from a JSON file, which is stored in the same directory as th
 Example
 -------
 To get the frequency of the first channel:
+
 .. code-block:: python
     >>> from echolens.instrument import CMB_Bharat
     >>> instrument = CMB_Bharat()
