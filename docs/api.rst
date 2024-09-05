@@ -35,10 +35,10 @@ echolens.instrument.model
 echolens.simulation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: echolens.simulation.CMBbharatSky
-   :members: from_file, observed_cmb_alms
+.. automodule:: echolens.simulation
+   :members:
    :show-inheritance:
    :inherited-members:
 
-   
+
 
