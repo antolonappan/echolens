@@ -21,9 +21,11 @@ Package Overview
    echolens.instrument.model
    echolens.simulation.sims
    echolens.simulation.cmb
-   echolens.simulation.nosie
+   echolens.simulation.noise
    echolens.simulation.fg
    echolens.simulation.mask
+   echolens.mpi
+   echolens.utils
 
 Module Details
 --------------
@@ -56,7 +58,7 @@ echolens.simulation.cmb
 echolens.simulation.nosie
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: echolens.simulation.nosie
+.. automodule:: echolens.simulation.noise
    :members:
    :show-inheritance:
    :inherited-members:
@@ -76,6 +78,26 @@ echolens.simulation.mask
    :members:
    :show-inheritance:
    :inherited-members:
+
+
+echolens.mpi
+~~~~~~~~~~~~
+
+.. automodule:: echolens.mpi
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+echolens.utils
+~~~~~~~~~~~~~~
+
+.. automodule:: echolens.utils
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+
+
 
 
 

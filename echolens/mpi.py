@@ -1,3 +1,6 @@
+"""
+MPI utilities for echolens
+"""
 try:
     from mpi4py import MPI
     mpi = MPI
