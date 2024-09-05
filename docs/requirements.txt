@@ -57,7 +57,7 @@ sphinxcontrib-serializinghtml==1.1.5
 urllib3==1.26.9
     # via requests
 nbsphinx
-numpy == 1.23.0
+numpy==1.23.0
 healpy
 pysm3
 lenspyx
