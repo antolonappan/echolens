@@ -38,7 +38,6 @@ echolens.simulation.CMBbharatSky
 
 .. automodule:: echolens.simulation.CMBbharatSky
    :members:
-   :undoc-members:
    :show-inheritance:
    :inherited-members:
 
