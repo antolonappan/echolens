@@ -37,6 +37,9 @@ class CMBbharatSky:
     """
 
     def __init__(self,libdir,nside,fg_model,inc_fg=True,inc_isw=False,cache=True):
+        """
+        Initializes the CMB_Bharat class by loading data from the specified file.
+        """
         self.fgdir = os.path.join(libdir,'foregrounds')
         self.__fg_str__ = ''.join(fg_model)
         self.__fg_inc_str__ = 'inc_fg' if inc_fg else 'no_fg'
