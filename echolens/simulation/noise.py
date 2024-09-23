@@ -6,6 +6,7 @@ import numpy as np
 import healpy as hp
 from echolens.utils import arc2cl, cl2arc, ilcnoise
 from typing import Optional
+from echolens import utils
 
 
 class NoiseSpectra:
@@ -44,7 +45,7 @@ class NoiseSpectra:
         :rtype: np.ndarray
         """
         if deconvolve:
-            return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
+            return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) * utils.cli(self.get_beam(idx)**2,overflow=True)
         else:
             return (arc2cl(self.im.get_noise_t(idx=idx)) * np.ones(self.lmax+1)) 
     
@@ -61,7 +62,7 @@ class NoiseSpectra:
         """
 
         if deconvolve:
-            return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1)) / self.get_beam(idx)**2
+            return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1)) * utils.cli(self.get_beam(idx)**2,overflow=True)
         else:
             return (arc2cl(self.im.get_noise_p(idx=idx)) * np.ones(self.lmax+1))
     
@@ -104,7 +105,7 @@ class NoiseSpectra:
         ilc_p = 1/np.sum(1/noise_p,axis=0)
         return np.array([ilc_t,ilc_p])
     
-    def eqv_noise(self) -> np.ndarray:
+    def eqv_noise(self,unit='muk-arcmin') -> np.ndarray:
         """
         Returns the equivalent noise power spectrum for the temperature and polarization.
 
@@ -116,7 +117,13 @@ class NoiseSpectra:
         T =  cl2arc(1/sum(1/arc2cl(t)))
         p = self.im.get_noise_p()
         P =  cl2arc(1/sum(1/arc2cl(p)))
-        return np.array([T,P])
+        N = np.array([T,P])
+        if unit == 'muk-arcmin':
+            return N
+        elif unit == 'muk':
+            return np.radians(N/60)**2
+        else:
+            raise ValueError('unit must be muk-arcmin or muk')
     
     def eqv_beam(self) -> np.ndarray:
         """
@@ -147,7 +154,7 @@ class GaussianNoiseMap:
 
     def __init__(self,nside : int,decon : Optional[bool] = True) -> None:
         self.nside = nside
-        self.spectra = NoiseSpectra()
+        self.spectra = NoiseSpectra(lmax=3*nside-1)
         self.decon = decon
 
     

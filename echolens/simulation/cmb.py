@@ -159,7 +159,7 @@ class CMBlensed:
         self.cmbseeds = None
         self.phiseeds = None
         self.nside = nside
-        self.lmax = 3*nside-1
+        self.lmax = (3 * nside) - 1
         self.set_seeds()
         self.lmax_len = self.lmax
         self.dlmax = 1024 

@@ -3,16 +3,21 @@ This module contains utility functions used in the echolens package.
 """
 import numpy as np
 import healpy as hp
+from typing import Optional
 
-def cli(cl : np.ndarray) -> np.ndarray:
+def cli(cl : np.ndarray, overflow: Optional[bool] = False) -> np.ndarray:
     """
     The function cli is used to compute the inverse of the input power spectrum.
 
     :param cl: The input power spectrum.
     :type cl: np.ndarray
+    :param overflow: If True, the function handles the case the power spectrum is super high. usefull for beam deconvolution.
+    :type overflow: bool
     :return: The inverse of the input power spectrum.
     :rtype: np.ndarray
     """
+    if overflow:
+        cl[np.where(cl > 1e5)] = 1e5
     ret = np.zeros_like(cl)
     ret[np.where(cl > 0)] = 1. / cl[np.where(cl > 0)]
     return ret
@@ -129,6 +134,24 @@ def cut_alms(alms : list, lmax_new : int) -> list:
     for i in range(len(alms)):
         alms_new.append(slice_alms(alms[i],lmax_new))  
     return alms_new
+
+def regularize_alms(alms : list) -> np.ndarray:
+    """
+    The function regularize_alms is used to regularize the input alms.
+
+    :param alms: The input alms.
+    :type alms: np.ndarray
+    :return: The regularized alms.
+    :rtype: np.ndarray
+    """
+    lmax_arr = []
+    for alm in alms:
+        lmax_arr.append(hp.Alm.getlmax(len(alm)))
+    lmax = np.min(lmax_arr)
+    alms_new = []
+    for alm in alms:
+        alms_new.append(slice_alms(alm,lmax))
+    return np.array(alms_new)
 
 
 def arc2cl(arc : np.ndarray) -> np.ndarray:

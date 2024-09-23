@@ -20,7 +20,12 @@ class Mask:
         self.nside = nside
         self.which = {60:0,70:1,80:2,90:3}
 
-    def get_mask(self,fsky : float,save : str = None) -> np.ndarray:
+    def get_mask(self,
+                 fsky: float,
+                 save: Optional[str] = None,
+                 apodize:Optional[bool] = False,
+                 apo_scale:Optional[float] = 0.0,
+        ) -> np.ndarray:
         """
         The method get_mask is used to get the mask for a specific fsky.
 
@@ -28,24 +33,40 @@ class Mask:
         :type fsky: float
         :param save: The path to save the mask.
         :type save: str, optional
+        :param apodize: Whether to apodize the mask.
+        :type apodize: bool, optional
+        :param apo_scale: The scale of the apodization.
+        :type apo_scale: float, optional
         :return: The mask for the specified fsky.
         :rtype: np.ndarray
         :raises ValueError: If the fsky is not valid.
         """
-        fsky = int(fsky)
+        if fsky <= 1:
+            fsky = int(fsky * 100)
+        
         if fsky not in [60,70,80,90]:
             raise ValueError('Invalid fsky. Choose between 60,70,80,90.')
+        
         mask = hp.read_map(mask_file, self.which[fsky])
-        if save:
-            hp.write_map(save,mask)
-        else:
-            return hp.ud_grade(mask,self.nside)
+        
+        if hp.npix2nside(len(mask)) != self.nside:
+            mask = hp.ud_grade(mask,self.nside)
+        
+        if apodize:
+            assert apo_scale is not None and apo_scale > 0, 'Apodization scale must be greater than 0.'
+            mask = self.apodize_mask(mask, apo_scale)
+
+        if save is not None:
+            if not os.path.isfile(save):
+                hp.write_map(save,mask,dtype=np.float32)
+        return mask
+        
     
     @staticmethod
     def apodize_mask(mask : np.ndarray, 
                      scale : float, 
                      method : Optional[str] = 'hybrid',
-                     mult_factor : Optional[float] = 0.1,
+                     mult_factor : Optional[float] = 3,
                      min_factor : Optional[float] = 0.1) -> np.ndarray:
         """
         The method apodize_mask is used to apodize the mask.
@@ -64,7 +85,6 @@ class Mask:
         :rtype: np.ndarray
         :raises ValueError: If the method is not valid.
         """
-
         sigma_rad = np.radians(scale)
         ap_mask = hp.smoothing(mask, sigma=sigma_rad)
         if method == 'gaussian': 
